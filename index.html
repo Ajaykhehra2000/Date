@@ -134,10 +134,13 @@ button{
 
 .no-btn{
     position:fixed;
-    background:#ff99bb;
+    background:#0066ff;
     color:white;
     z-index:999;
     transition:0.1s linear;
+    box-shadow:0 5px 20px rgba(0,102,255,0.6);
+    font-weight:bold;
+    border:3px solid white;
 }
 
 form{
@@ -330,13 +333,23 @@ function animateButton(){
     x+=dx;
     y+=dy;
 
-    // Bounce on walls
-    if(x<=0 || x+btnWidth>=screenWidth){
-        dx*=-1;
+    // Keep button within bounds
+    if(x<=0){
+        x=0;
+        dx=Math.abs(dx);
+    }
+    if(x+btnWidth>=screenWidth){
+        x=screenWidth-btnWidth;
+        dx=-Math.abs(dx);
     }
 
-    if(y<=0 || y+btnHeight>=screenHeight){
-        dy*=-1;
+    if(y<=0){
+        y=0;
+        dy=Math.abs(dy);
+    }
+    if(y+btnHeight>=screenHeight){
+        y=screenHeight-btnHeight;
+        dy=-Math.abs(dy);
     }
 
     noBtn.style.left=x+"px";
