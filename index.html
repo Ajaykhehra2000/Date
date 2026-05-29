@@ -133,7 +133,6 @@ button{
 }
 
 .no-btn{
-    position:fixed;
     background:#0066ff;
     color:white;
     z-index:999;
@@ -308,52 +307,50 @@ function showPage2(){
 
 const noBtn=document.getElementById("noBtn");
 
-// Initial Position
-let x=100;
-let y=100;
-
-// Speed
-let dx=3;
-let dy=3;
+// Position variables
+let x=0;
+let y=0;
+let dx=0;
+let dy=0;
+let isMoving=false;
 
 // Button Size
 let btnWidth=noBtn.offsetWidth;
 let btnHeight=noBtn.offsetHeight;
 
-// Initial Position Apply
-noBtn.style.left=x+"px";
-noBtn.style.top=y+"px";
-
 // Animation Loop
 function animateButton(){
 
-    const screenWidth=window.innerWidth;
-    const screenHeight=window.innerHeight;
+    if(isMoving){
+        const screenWidth=window.innerWidth;
+        const screenHeight=window.innerHeight;
 
-    x+=dx;
-    y+=dy;
+        x+=dx;
+        y+=dy;
 
-    // Keep button within bounds
-    if(x<=0){
-        x=0;
-        dx=Math.abs(dx);
-    }
-    if(x+btnWidth>=screenWidth){
-        x=screenWidth-btnWidth;
-        dx=-Math.abs(dx);
-    }
+        // Keep button within bounds
+        if(x<=0){
+            x=0;
+            dx=Math.abs(dx);
+        }
+        if(x+btnWidth>=screenWidth){
+            x=screenWidth-btnWidth;
+            dx=-Math.abs(dx);
+        }
 
-    if(y<=0){
-        y=0;
-        dy=Math.abs(dy);
-    }
-    if(y+btnHeight>=screenHeight){
-        y=screenHeight-btnHeight;
-        dy=-Math.abs(dy);
-    }
+        if(y<=0){
+            y=0;
+            dy=Math.abs(dy);
+        }
+        if(y+btnHeight>=screenHeight){
+            y=screenHeight-btnHeight;
+            dy=-Math.abs(dy);
+        }
 
-    noBtn.style.left=x+"px";
-    noBtn.style.top=y+"px";
+        noBtn.style.position="fixed";
+        noBtn.style.left=x+"px";
+        noBtn.style.top=y+"px";
+    }
 
     requestAnimationFrame(animateButton);
 }
@@ -361,7 +358,13 @@ function animateButton(){
 animateButton();
 
 // Teleport on click
-noBtn.addEventListener("click",()=>{
+noBtn.addEventListener("click",(e)=>{
+    e.preventDefault();
+
+    if(!isMoving){
+        isMoving=true;
+        noBtn.style.position="fixed";
+    }
 
     const maxX=window.innerWidth-btnWidth;
     const maxY=window.innerHeight-btnHeight;
@@ -369,31 +372,12 @@ noBtn.addEventListener("click",()=>{
     x=Math.random()*maxX;
     y=Math.random()*maxY;
 
-    // Increase speed slightly
-    dx+=(dx>0?0.5:-0.5);
-    dy+=(dy>0?0.5:-0.5);
-});
+    // Set random velocity
+    dx=(Math.random()-0.5)*6;
+    dy=(Math.random()-0.5)*6;
 
-// Move if mouse gets close
-document.addEventListener("mousemove",(e)=>{
-
-    const rect=noBtn.getBoundingClientRect();
-
-    const distanceX=e.clientX-(rect.left+rect.width/2);
-
-    const distanceY=e.clientY-(rect.top+rect.height/2);
-
-    const distance=Math.sqrt(distanceX*distanceX + distanceY*distanceY);
-
-    if(distance<120){
-
-        const maxX=window.innerWidth-btnWidth;
-        const maxY=window.innerHeight-btnHeight;
-
-        x=Math.random()*maxX;
-        y=Math.random()*maxY;
-    }
-
+    noBtn.style.left=x+"px";
+    noBtn.style.top=y+"px";
 });
 
 // =======================
