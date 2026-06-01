@@ -79,7 +79,7 @@ for(let i=0;i<35;i++){
 <div class="container page active" id="page1">
     <div class="teddy">🧸</div>
     <h1 class="sparkle">
-        Would You Like To Go Out With Me?
+        Would You Like To Go Out With Me, Robin?
     </h1>
     <p class="subtitle">
         Pretty please? ❤️
@@ -120,7 +120,7 @@ for(let i=0;i<35;i++){
 <div class="container page" id="page3">
     <div class="teddy">🧸💖</div>
     <div class="final-message sparkle">
-        I can't wait to see you ❤️
+        I can't wait to see you, Robin ❤️
         <br><br>
         This is going to be magical ✨
     </div>
@@ -134,6 +134,21 @@ emailjs.init("7PctZidwByvIFpZed");
 function showPage2(){
     document.getElementById("page1").classList.remove("active");
     document.getElementById("page2").classList.add("active");
+    setDateConstraints();
+}
+// SET DATE CONSTRAINTS - ONLY NEXT 30 DAYS
+function setDateConstraints(){
+    const dateInput = document.getElementById("date");
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const thirtyDaysFromNow = new Date(today);
+    thirtyDaysFromNow.setDate(today.getDate() + 30);
+    
+    const formatDate = (date) => date.toISOString().split('T')[0];
+    
+    dateInput.min = formatDate(tomorrow);
+    dateInput.max = formatDate(thirtyDaysFromNow);
 }
 // NO BUTTON MOVE ON CLICK
 const noBtn = document.getElementById("noBtn");
