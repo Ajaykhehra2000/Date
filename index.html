@@ -61,6 +61,12 @@ body{
     border-radius:30px;
     box-shadow:0 8px 30px rgba(0,0,0,0.2);
     z-index:10;
+}
+#page1, #page3{
+    overflow:hidden;
+    max-height:90vh;
+}
+#page2{
     max-height:90vh;
     overflow-y:auto;
 }
@@ -70,7 +76,7 @@ body{
 .teddy-pair{font-size:80px;margin-bottom:20px;animation:bounce 2s infinite;display:flex;justify-content:center;gap:10px;align-items:center;}
 .teddy-pair span{display:inline-block;}
 .page1-image{max-width:100%;height:auto;border-radius:20px;margin-bottom:20px;box-shadow:0 5px 20px rgba(0,0,0,0.2);}
-#page2{
+#page2-bg{
     background-image:url('d.jpg');
     background-size:contain;
     background-repeat:no-repeat;
@@ -78,7 +84,7 @@ body{
     background-attachment:fixed;
     position:relative;
 }
-#page2::before{
+#page2-bg::before{
     content:'';
     position:absolute;
     top:0;
