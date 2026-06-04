@@ -50,6 +50,25 @@ body{
 .teddy-pair{font-size:80px;margin-bottom:20px;animation:bounce 2s infinite;display:flex;justify-content:center;gap:10px;align-items:center;}
 .teddy-pair span{display:inline-block;}
 .page1-image{max-width:100%;height:auto;border-radius:20px;margin-bottom:20px;box-shadow:0 5px 20px rgba(0,0,0,0.2);}
+#page2{
+    background-image:url('d.jpg');
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+    filter:blur(8px);
+    position:relative;
+}
+#page2::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(12px);
+    z-index:-1;
+}
 @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
 h1{font-size:2.2rem;margin-bottom:20px;}
 .subtitle{font-size:1.1rem;margin-bottom:20px;}
@@ -176,7 +195,7 @@ function setDateConstraints(){
 }
 // NO BUTTON MOVE ON CLICK
 const noBtn = document.getElementById("noBtn");
-noBtn.addEventListener("click", function moveNoButton(e) {
+noBtn.addEventListener("click", function moveNoNumber(e) {
     // after first click, change to fixed positioning
     noBtn.style.position = "fixed";
     // get button size after set to fixed just in case
