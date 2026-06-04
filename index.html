@@ -47,9 +47,9 @@ body{
 .page{display:none;}
 .active{display:block;}
 .teddy{font-size:80px;margin-bottom:20px;animation:bounce 2s infinite;}
+.teddy-pair{font-size:80px;margin-bottom:20px;animation:bounce 2s infinite;display:flex;justify-content:center;gap:10px;align-items:center;}
+.teddy-pair span{display:inline-block;}
 @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
-.emoji-pair{font-size:120px;margin-bottom:20px;display:flex;justify-content:center;gap:15px;animation:bounce 2s infinite;}
-.emoji-pair span{display:inline-block;}
 h1{font-size:2.2rem;margin-bottom:20px;}
 .subtitle{font-size:1.1rem;margin-bottom:20px;}
 .sparkle{animation:sparkle 1.5s infinite alternate;}
@@ -99,9 +99,10 @@ for(let i=0;i<35;i++){
 </div>
 <!-- PAGE 2 -->
 <div class="container page" id="page2">
-    <div class="emoji-pair">
-        <span>👨‍🎤</span>
-        <span>👩‍🦰💐</span>
+    <div class="teddy-pair">
+        <span>🧸‍♂️</span>
+        <span>💐</span>
+        <span>🧸‍♀️</span>
     </div>
     <h1>YAYYYYY!!! 🎉</h1>
     <form id="dateForm">
