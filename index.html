@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For You ❤️</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 *{
     margin:0;
@@ -33,6 +34,23 @@ body{
     50%{opacity:1;}
     100%{transform:translateY(-120vh) scale(1.2);opacity:0;}
 }
+.confetti{
+    position:fixed;
+    width:10px;
+    height:10px;
+    pointer-events:none;
+    animation:confetti-fall 3s ease-out forwards;
+}
+@keyframes confetti-fall{
+    0%{
+        transform:translateY(0) rotateZ(0deg);
+        opacity:1;
+    }
+    100%{
+        transform:translateY(100vh) rotateZ(720deg);
+        opacity:0;
+    }
+}
 .container{
     width:90%;
     max-width:500px;
@@ -43,6 +61,8 @@ body{
     border-radius:30px;
     box-shadow:0 8px 30px rgba(0,0,0,0.2);
     z-index:10;
+    max-height:90vh;
+    overflow-y:auto;
 }
 .page{display:none;}
 .active{display:block;}
@@ -82,6 +102,40 @@ button{border:none;padding:15px 30px;border-radius:50px;font-size:1rem;cursor:po
 select,input{padding:15px;border:none;border-radius:15px;font-size:1rem;outline:none;}
 .submit-btn{background:#ff4d88;color:white;}
 .final-message{font-size:2rem;line-height:1.5;}
+.countdown{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:10px;
+    margin:20px 0;
+}
+.countdown-item{
+    background:rgba(255,255,255,0.2);
+    padding:15px;
+    border-radius:15px;
+    font-size:1.3rem;
+    font-weight:bold;
+}
+.countdown-label{
+    font-size:0.8rem;
+    opacity:0.8;
+}
+.date-details{
+    background:rgba(255,255,255,0.2);
+    padding:15px;
+    border-radius:15px;
+    margin:15px 0;
+    font-size:1rem;
+}
+#map{
+    width:100%;
+    height:200px;
+    border-radius:15px;
+    margin:15px 0;
+    z-index:5;
+}
+.leaflet-container{
+    border-radius:15px;
+}
 </style>
 </head>
 <body>
@@ -129,16 +183,16 @@ for(let i=0;i<35;i++){
     <form id="dateForm">
         <select id="activity" required>
             <option value="">Choose our date ❤️</option>
-            <option>South Bank Parklands 🌸</option>
-            <option>Lone Pine Koala Sanctuary 🐨</option>
-            <option>City Botanic Gardens 🌺</option>
-            <option>Breakfast at Newstead House ☕</option>
-            <option>Kayaking on Brisbane River 🚣</option>
-            <option>Southbank Culture Precinct 🎭</option>
-            <option>Mount Coot-tha Lookout 🏔️</option>
-            <option>Dinner at Eagle Street Pier 🍽️</option>
-            <option>Movie at Event Cinemas Southbank 🎬</option>
-            <option>Picnic at New Farm Park 🌳</option>
+            <option value="South Bank Parklands" data-lat="-27.4829" data-lng="153.0200">South Bank Parklands 🌸</option>
+            <option value="Lone Pine Koala Sanctuary" data-lat="-27.5598" data-lng="153.0144">Lone Pine Koala Sanctuary 🐨</option>
+            <option value="City Botanic Gardens" data-lat="-27.4873" data-lng="153.0261">City Botanic Gardens 🌺</option>
+            <option value="Breakfast at Newstead House" data-lat="-27.4715" data-lng="153.0566">Breakfast at Newstead House ☕</option>
+            <option value="Kayaking on Brisbane River" data-lat="-27.4700" data-lng="153.0200">Kayaking on Brisbane River 🚣</option>
+            <option value="Southbank Culture Precinct" data-lat="-27.4842" data-lng="153.0180">Southbank Culture Precinct 🎭</option>
+            <option value="Mount Coot-tha Lookout" data-lat="-27.4831" data-lng="152.9892">Mount Coot-tha Lookout 🏔️</option>
+            <option value="Dinner at Eagle Street Pier" data-lat="-27.4650" data-lng="153.0330">Dinner at Eagle Street Pier 🍽️</option>
+            <option value="Movie at Event Cinemas Southbank" data-lat="-27.4842" data-lng="153.0200">Movie at Event Cinemas Southbank 🎬</option>
+            <option value="Picnic at New Farm Park" data-lat="-27.4578" data-lng="153.0547">Picnic at New Farm Park 🌳</option>
         </select>
         <input type="date" id="date" required>
         <input type="time" id="time" required>
@@ -150,23 +204,120 @@ for(let i=0;i<35;i++){
 <!-- PAGE 3 -->
 <div class="container page" id="page3">
     <div class="teddy">🧸💖</div>
+    <h1 class="sparkle">I can't wait to see you, Robin! ❤️</h1>
+    
+    <div class="date-details">
+        <strong id="displayActivity">Activity</strong><br>
+        <span id="displayDate">Date</span> at <span id="displayTime">Time</span>
+    </div>
+
+    <div class="countdown">
+        <div class="countdown-item">
+            <div id="days">0</div>
+            <div class="countdown-label">Days</div>
+        </div>
+        <div class="countdown-item">
+            <div id="hours">0</div>
+            <div class="countdown-label">Hours</div>
+        </div>
+        <div class="countdown-item">
+            <div id="minutes">0</div>
+            <div class="countdown-label">Minutes</div>
+        </div>
+        <div class="countdown-item">
+            <div id="seconds">0</div>
+            <div class="countdown-label">Seconds</div>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
     <div class="final-message sparkle">
-        I can't wait to see you, Robin ❤️
-        <br><br>
         This is going to be magical ✨
     </div>
 </div>
+
+<!-- Leaflet JS for Maps -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 // EMAILJS INIT
 emailjs.init("7PctZidwByvIFpZed");
+
+// CONFETTI ANIMATION
+function createConfetti(){
+    const colors = ['#ff4d88', '#ffb6d9', '#ff85c2', '#ffcce6', '#ffffff'];
+    for(let i = 0; i < 100; i++){
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+        confetti.style.animationDelay = Math.random() * 0.5 + 's';
+        document.body.appendChild(confetti);
+        
+        setTimeout(() => confetti.remove(), 5000);
+    }
+}
+
+// COUNTDOWN TIMER
+let countdownInterval;
+function startCountdown(dateStr, timeStr){
+    const [year, month, day] = dateStr.split('-');
+    const [hours, minutes] = timeStr.split(':');
+    const targetDate = new Date(year, month - 1, day, hours, minutes, 0).getTime();
+    
+    countdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+        
+        if(distance < 0){
+            clearInterval(countdownInterval);
+            document.getElementById('days').textContent = '0';
+            document.getElementById('hours').textContent = '0';
+            document.getElementById('minutes').textContent = '0';
+            document.getElementById('seconds').textContent = '0';
+            return;
+        }
+        
+        const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        document.getElementById('days').textContent = d;
+        document.getElementById('hours').textContent = h;
+        document.getElementById('minutes').textContent = m;
+        document.getElementById('seconds').textContent = s;
+    }, 1000);
+}
+
+// MAP INITIALIZATION
+let map;
+function initMap(activity, lat, lng){
+    if(map){
+        map.remove();
+    }
+    
+    map = L.map('map').setView([lat, lng], 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19
+    }).addTo(map);
+    
+    L.marker([lat, lng]).addTo(map)
+        .bindPopup('<b>' + activity + '</b>')
+        .openPopup();
+    
+    map.invalidateSize();
+}
+
 // PAGE CHANGE
 function showPage2(){
     document.getElementById("page1").classList.remove("active");
     document.getElementById("page2").classList.add("active");
     setDateConstraints();
-    // Play celebration music
     const audio = document.getElementById("celebrationMusic");
     audio.currentTime = 0;
     audio.volume = 1;
@@ -174,11 +325,11 @@ function showPage2(){
     
     if (playPromise !== undefined) {
         playPromise.catch(error => {
-            console.log("Audio autoplay failed (this is normal in some browsers):", error);
-            console.log("User may need to click on the page first to enable sound");
+            console.log("Audio autoplay failed:", error);
         });
     }
 }
+
 // SET DATE CONSTRAINTS - ONLY NEXT 30 DAYS
 function setDateConstraints(){
     const dateInput = document.getElementById("date");
@@ -193,12 +344,11 @@ function setDateConstraints(){
     dateInput.min = formatDate(tomorrow);
     dateInput.max = formatDate(thirtyDaysFromNow);
 }
+
 // NO BUTTON MOVE ON CLICK
 const noBtn = document.getElementById("noBtn");
 noBtn.addEventListener("click", function moveNoNumber(e) {
-    // after first click, change to fixed positioning
     noBtn.style.position = "fixed";
-    // get button size after set to fixed just in case
     const btnWidth = noBtn.offsetWidth;
     const btnHeight = noBtn.offsetHeight;
     const maxX = window.innerWidth - btnWidth;
@@ -208,28 +358,48 @@ noBtn.addEventListener("click", function moveNoNumber(e) {
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
 });
+
 // FORM SUBMIT
-    document.getElementById("dateForm").addEventListener("submit",function(e){
-        e.preventDefault();
-        const activity=document.getElementById("activity").value;
-        const date=document.getElementById("date").value;
-        const time=document.getElementById("time").value;
-        emailjs.send("service_f03t4oh","template_u9q501c",{
-            activity:activity,
-            date:date,
-            time:time,
-            to_email:"di28812@gmail.com"
-        })
-        .then(function(response){
-            console.log("SUCCESS!",response.status,response.text);
-            document.getElementById("page2").classList.remove("active");
-            document.getElementById("page3").classList.add("active");
-        })
-        .catch(function(error){
-            console.log("FAILED...",error);
-            alert("Something went wrong 😢");
-        });
+document.getElementById("dateForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    const activitySelect = document.getElementById("activity");
+    const activity = activitySelect.value;
+    const selectedOption = activitySelect.options[activitySelect.selectedIndex];
+    const lat = selectedOption.getAttribute('data-lat');
+    const lng = selectedOption.getAttribute('data-lng');
+    const date = document.getElementById("date").value;
+    const time = document.getElementById("time").value;
+    
+    emailjs.send("service_f03t4oh","template_u9q501c",{
+        activity: activity,
+        date: date,
+        time: time,
+        to_email:"di28812@gmail.com"
+    })
+    .then(function(response){
+        console.log("SUCCESS!", response.status, response.text);
+        document.getElementById("page2").classList.remove("active");
+        document.getElementById("page3").classList.add("active");
+        
+        // Display date details on page 3
+        document.getElementById("displayActivity").textContent = activity;
+        document.getElementById("displayDate").textContent = new Date(date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        document.getElementById("displayTime").textContent = time;
+        
+        // Start countdown
+        startCountdown(date, time);
+        
+        // Initialize map
+        initMap(activity, lat, lng);
+        
+        // Create confetti
+        createConfetti();
+    })
+    .catch(function(error){
+        console.log("FAILED...", error);
+        alert("Something went wrong 😢");
     });
+});
 </script>
 </body>
 </html>
