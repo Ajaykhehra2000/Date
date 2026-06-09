@@ -114,8 +114,7 @@ body{
     z-index:-1;
 }
 
-}
-}
+
 @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
 h1{font-size:2.2rem;margin-bottom:20px;}
 .subtitle{font-size:1.1rem;margin-bottom:20px;}
@@ -197,39 +196,35 @@ select,input{padding:15px;border:none;border-radius:15px;font-size:1rem;outline:
     }
 }
 .lightbox{
-    display:none;
     position:fixed;
     top:0;
     left:0;
-    width:100%;
-    height:100%;
+    width:100vw;
+    height:100vh;
     background:rgba(0,0,0,0.9);
+    display:flex;
     justify-content:center;
     align-items:center;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity 0.35s ease;
     z-index:9999;
 }
+
+.lightbox.active{
+    opacity:1;
+    visibility:visible;
+}
 .lightbox img{
     max-width:90%;
     max-height:90%;
     border-radius:15px;
-    animation:zoomIn 0.3s ease;
+    
 }
 
-@keyframes zoomIn{
-    from{
-        transform:scale(0.8);
-        opacity:0;
-    }
-    to{
-        transform:scale(1);
-        opacity:1;
-    }
-}
-.lightbox img{
-    max-width:90%;
-    max-height:90%;
-    border-radius:15px;
-}
+
+
+
 .leaflet-container{
     border-radius:15px;
 }
@@ -350,6 +345,9 @@ for(let i=0;i<35;i++){
     <div class="final-message sparkle">
         This is going to be magical ✨
     </div>
+</div>
+ <div class="lightbox" id="lightbox">
+    <img id="lightboxImg" alt="Enlarged photo">
 </div>
 
 <!-- Leaflet JS for Maps -->
@@ -477,15 +475,49 @@ noBtn.addEventListener("click", function moveNoNumber(e) {
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightboxImg");
 
-document.addEventListener("click", function(e){
-    if(e.target.matches(".album-grid img")){
-        lightbox.style.display = "flex";
-        lightboxImg.src = e.target.src;
-    }
+document.querySelectorAll(".album-grid img").forEach(img => {
+
+    img.addEventListener("click", () => {
+
+        document.getElementById("page3").scrollTop = 0;
+        
+        const rect = img.getBoundingClientRect();
+
+        lightboxImg.src = img.src;
+
+        lightboxImg.style.position = "fixed";
+        lightboxImg.style.top = rect.top + "px";
+        lightboxImg.style.left = rect.left + "px";
+        lightboxImg.style.width = rect.width + "px";
+        lightboxImg.style.height = rect.height + "px";
+        lightboxImg.style.objectFit = "cover";
+
+        lightbox.classList.add("active");
+
+       
+        
+        requestAnimationFrame(() => {
+            lightboxImg.style.transition = "all 0.45s ease";
+            lightboxImg.style.top = "50%";
+            lightboxImg.style.left = "50%";
+            lightboxImg.style.width = "min(80vw,700px)";
+            lightboxImg.style.height = "";
+            lightboxImg.style.maxHeight = "80vh";
+            lightboxImg.style.transform = "translate(-50%, -50%)";
+        });
+
+    });
+
 });
 
-lightbox.addEventListener("click", function(){
-    lightbox.style.display = "none";
+lightbox.addEventListener("click", () => {
+
+    lightbox.classList.remove("active");
+
+    setTimeout(() => {
+        lightboxImg.removeAttribute("style");
+    }, 450);
+
 });
 
 // FORM SUBMIT
@@ -530,8 +562,7 @@ document.getElementById("dateForm").addEventListener("submit", function(e){
     });
 });
 </script>
-    <div class="lightbox" id="lightbox">
-    <img id="lightboxImg">
-</div>
+   
 </body>
+
 </html>
