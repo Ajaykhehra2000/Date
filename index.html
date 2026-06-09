@@ -265,7 +265,16 @@ for(let i=0;i<35;i++){
     </div>
 
     <div id="map"></div>
+<div class="photo-album">
+    <h2>📸 The Prettiest Girl in My World</h2>
 
+    <div class="album-grid">
+        <img src="R1.jpg" alt="Memory 1">
+        <img src="R2.jpg" alt="Memory 2">
+        <img src="R3.jpg" alt="Memory 3">
+        <img src="R4.jpg" alt="Memory 4">
+    </div>
+</div>
     <div class="final-message sparkle">
         This is going to be magical ✨
     </div>
@@ -294,7 +303,30 @@ function createConfetti(){
         setTimeout(() => confetti.remove(), 5000);
     }
 }
+.photo-album{
+    margin:25px 0;
+}
 
+.photo-album h2{
+    margin-bottom:15px;
+    font-size:1.5rem;
+}
+
+.album-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.album-grid img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+    border-radius:15px;
+    cursor:pointer;
+    transition:0.3s;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
 // COUNTDOWN TIMER
 let countdownInterval;
 function startCountdown(dateStr, timeStr){
