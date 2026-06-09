@@ -160,6 +160,30 @@ select,input{padding:15px;border:none;border-radius:15px;font-size:1rem;outline:
     margin:15px 0;
     z-index:5;
 }
+.photo-album{
+    margin:25px 0;
+}
+
+.photo-album h2{
+    margin-bottom:15px;
+    font-size:1.5rem;
+}
+
+.album-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.album-grid img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+    border-radius:15px;
+    cursor:pointer;
+    transition:0.3s;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
 .leaflet-container{
     border-radius:15px;
 }
@@ -184,6 +208,7 @@ for(let i=0;i<35;i++){
     heart.style.fontSize=(20+Math.random()*30)+"px";
     document.body.appendChild(heart);
 }
+    
 </script>
 <!-- Hidden Audio Element -->
 <audio id="celebrationMusic" loop>
@@ -303,30 +328,7 @@ function createConfetti(){
         setTimeout(() => confetti.remove(), 5000);
     }
 }
-.photo-album{
-    margin:25px 0;
-}
 
-.photo-album h2{
-    margin-bottom:15px;
-    font-size:1.5rem;
-}
-
-.album-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:12px;
-}
-
-.album-grid img{
-    width:100%;
-    height:180px;
-    object-fit:cover;
-    border-radius:15px;
-    cursor:pointer;
-    transition:0.3s;
-    box-shadow:0 5px 15px rgba(0,0,0,0.2);
-}
 // COUNTDOWN TIMER
 let countdownInterval;
 function startCountdown(dateStr, timeStr){
