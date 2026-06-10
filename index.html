@@ -260,7 +260,40 @@ select,input{padding:15px;border:none;border-radius:15px;font-size:1rem;outline:
     margin-bottom: 12px;
     font-size: 1.1rem;
 }
+.reason-card{
+    background: linear-gradient(135deg, rgba(0,102,255,0.25), rgba(135,206,250,0.18));
+    border: 2px solid rgba(255,255,255,0.35);
+    box-shadow: 0 10px 30px rgba(0,102,255,0.25);
+    transform: scale(1.02);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+}
 
+/* soft bluish glow animation */
+.reason-card::before{
+    content:"";
+    position:absolute;
+    top:-50%;
+    left:-50%;
+    width:200%;
+    height:200%;
+    background: radial-gradient(circle, rgba(135,206,250,0.35), transparent 60%);
+    animation: blueGlowMove 6s ease-in-out infinite;
+    pointer-events:none;
+}
+
+@keyframes blueGlowMove{
+    0%{ transform: translate(0,0); opacity:0.6; }
+    50%{ transform: translate(10%,10%); opacity:1; }
+    100%{ transform: translate(0,0); opacity:0.6; }
+}
+
+.reason-card h3{
+    color: #e6f4ff;
+    text-shadow: 0 2px 12px rgba(0,102,255,0.4);
+    font-size: 1.2rem;
+}
 .extra-item{
     display: flex;
     align-items: center;
@@ -470,7 +503,7 @@ for(let i=0;i<35;i++){
             <div class="countdown-label">Seconds</div>
         </div>
     </div>
-<div class="date-details">
+<div class="date-details reason-card">
     <h3>❤️ Reasons I Like You ❤️</h3>
     <div id="reasonBox">
         Your smile 😊
@@ -487,7 +520,10 @@ for(let i=0;i<35;i++){
         <img src="R4.jpg" alt="Memory 4">
     </div>
 </div>
-    
+    <div class="date-details sparkle">
+    <strong>💝 I’ll bring:</strong><br>
+    <span id="displayBring"></span>
+</div>
     <div class="final-message sparkle">
         This is going to be magical ✨
     </div>
@@ -840,11 +876,13 @@ if(document.getElementById("extra4").checked) extras.push("Holding Hands");
         console.log("SUCCESS!", response.status, response.text);
         document.getElementById("page2").classList.remove("active");
         document.getElementById("page3").classList.add("active");
+       
         
         // Display date details on page 3
         document.getElementById("displayActivity").textContent = activity;
         document.getElementById("displayDate").textContent = new Date(date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         document.getElementById("displayTime").textContent = time;
+        document.getElementById("displayBring").textContent = bring;
         
         // Start countdown
         startCountdown(date, time);
