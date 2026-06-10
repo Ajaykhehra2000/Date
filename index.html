@@ -247,7 +247,51 @@ select,input{padding:15px;border:none;border-radius:15px;font-size:1rem;outline:
                 top 0.25s ease,
                 transform 0.2s ease;
 }
+.extras-box{
+    background: rgba(255,255,255,0.18);
+    padding: 18px;
+    border-radius: 20px;
+    margin-top: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    backdrop-filter: blur(10px);
+}
 
+.extras-box h3{
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+}
+
+.extra-item{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    margin: 10px 0;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.15);
+    cursor: pointer;
+    font-size: 1.05rem;
+    transition: 0.25s ease;
+}
+
+.extra-item:hover{
+    transform: scale(1.03);
+    background: rgba(255,255,255,0.25);
+}
+
+.extra-item input{
+    transform: scale(1.3);
+    accent-color: #ff4d88;
+}
+
+.extra-item span{
+    font-weight: 500;
+}
+
+.extra-item input:checked + span{
+    color: #ff4d88;
+    font-weight: 700;
+}
 label{
     display:block;
     margin:6px 0;
@@ -348,11 +392,29 @@ for(let i=0;i<35;i++){
         </select>
         <input type="date" id="date" required>
         <input type="time" id="time" required>
-        <div style="margin-top:15px;">
-           <label><input type="checkbox" id="extra1"> Ice Cream 🍦</label><br>
-           <label><input type="checkbox" id="extra2"> Sunset Watching 🌅</label><br>
-           <label><input type="checkbox" id="extra3"> Photos Together 📸</label><br>
-           <label><input type="checkbox" id="extra4"> Holding Hands 🤝</label><br>
+       <div class="extras-box">
+    <h3>🍓 Little things for our date</h3>
+
+    <label class="extra-item">
+        <input type="checkbox" id="extra1">
+        <span>🍦 Ice Cream</span>
+    </label>
+
+    <label class="extra-item">
+        <input type="checkbox" id="extra2">
+        <span>🌅 Sunset Watching</span>
+    </label>
+
+    <label class="extra-item">
+        <input type="checkbox" id="extra3">
+        <span>📸 Photos Together</span>
+    </label>
+
+    <label class="extra-item">
+        <input type="checkbox" id="extra4">
+        <span>🤝 Holding Hands</span>
+    </label>
+</div>
       <select id="bring" required>
               <option value="">What should I bring for you? 💝</option>
              <option value="Flowers">Flowers 🌹</option>
