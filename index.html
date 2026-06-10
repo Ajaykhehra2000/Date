@@ -222,9 +222,32 @@ select,input{padding:15px;border:none;border-radius:15px;font-size:1rem;outline:
     
 }
 
+#reasonBox{
+    margin-top:10px;
+    font-size:1.1rem;
+    font-weight:600;
+    min-height:40px;
+    transition:opacity 0.5s ease;
+}
+.rose{
+    position:fixed;
+    font-size:28px;
+    pointer-events:none;
+    z-index:9999;
+    animation:roseFall 4s linear forwards;
+}
 
+@keyframes roseFall{
+    0%{
+        transform:translateY(-50px) rotate(0deg);
+        opacity:1;
+    }
 
-
+    100%{
+        transform:translateY(110vh) rotate(720deg);
+        opacity:0;
+    }
+}
 .leaflet-container{
     border-radius:15px;
 }
@@ -329,7 +352,12 @@ for(let i=0;i<35;i++){
             <div class="countdown-label">Seconds</div>
         </div>
     </div>
-
+<div class="date-details">
+    <h3>❤️ Reasons I Like You ❤️</h3>
+    <div id="reasonBox">
+        Your smile 😊
+    </div>
+</div>
     <div id="map"></div>
 <div class="photo-album">
     <h2>📸 ❤️ The Prettiest Girl In My Life ❤️</h2>
@@ -519,7 +547,31 @@ lightbox.addEventListener("click", () => {
     }, 450);
 
 });
+const reasons = [
+    "Your smile brightens my day 😊",
+    "You always make me laugh 😂",
+    "You're incredibly thoughtful ❤️",
+    "I love talking to you 🥰",
+    "You make every moment feel special ✨",
+    "You look gorgeous in every photo 📸❤️",
+    "You have the sweetest heart 💖",
+    "Being with you feels easy and natural 🌸"
+];
+    function startReasonsCarousel(){
+    const reasonBox = document.getElementById("reasonBox");
 
+    setInterval(() => {
+        reasonBox.classList.add("fade-out");
+
+        setTimeout(() => {
+            reasonBox.textContent =
+                reasons[Math.floor(Math.random() * reasons.length)];
+
+            reasonBox.classList.remove("fade-out");
+        }, 500);
+
+    }, 4000);
+}
 // FORM SUBMIT
 document.getElementById("dateForm").addEventListener("submit", function(e){
     e.preventDefault();
@@ -555,7 +607,32 @@ document.getElementById("dateForm").addEventListener("submit", function(e){
         
         // Create confetti
         createConfetti();
+        showerRoses();
     })
+        function showerRoses(){
+
+    for(let i = 0; i < 40; i++){
+
+        const rose = document.createElement("div");
+
+        rose.classList.add("rose");
+        rose.innerHTML = "🌹";
+
+        rose.style.left = Math.random() * 100 + "vw";
+
+        rose.style.animationDuration =
+            (3 + Math.random() * 3) + "s";
+
+        rose.style.fontSize =
+            (20 + Math.random() * 20) + "px";
+
+        document.body.appendChild(rose);
+
+        setTimeout(() => {
+            rose.remove();
+        }, 6000);
+    }
+}
     .catch(function(error){
         console.log("FAILED...", error);
         alert("Something went wrong 😢");
