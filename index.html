@@ -126,7 +126,7 @@ h1{font-size:2.2rem;margin-bottom:20px;}
 button{border:none;padding:15px 30px;border-radius:50px;font-size:1rem;cursor:pointer;margin:10px;font-weight:bold;}
 .yes-btn{background:#ff4d88;color:white;box-shadow:0 5px 15px rgba(255,77,136,0.5);transition:0.3s;}
 .yes-btn:hover{transform:scale(1.1);}
-.no-btn{background:#0066ff;color:white;z-index:999;transition:0.1s linear;box-shadow:0 5px 20px rgba(0,102,255,0.6);font-weight:bold;border:3px solid white;position:relative;}
+.no-btn{background:#0066ff;color:white;z-index:999;transition:0.1s linear;box-shadow:0 5px 20px rgba(0,102,255,0.6);font-weight:bold;border:3px solid white;position:absolute;}
 .form{display:flex;flex-direction:column;gap:18px;margin-top:20px;}
 select,input{padding:15px;border:none;border-radius:15px;font-size:1rem;outline:none;}
 .submit-btn{background:#ff4d88;color:white;}
@@ -242,7 +242,11 @@ select,input{padding:15px;border:none;border-radius:15px;font-size:1rem;outline:
 .fade-out{
     opacity:0;
 }
-
+.no-btn{
+    transition: left 0.25s ease,
+                top 0.25s ease,
+                transform 0.2s ease;
+}
 #typewriterText::after{
     content:"|";
     animation:blink 0.8s infinite;
@@ -504,30 +508,55 @@ function setDateConstraints(){
 
 // NO BUTTON MOVE ON CLICK
 const noBtn = document.getElementById("noBtn");
+const page1 = document.getElementById("page1");
+
 let noClickCount = 0;
 
-noBtn.addEventListener("click", function(){
+// starting position
+let currentX = noBtn.offsetLeft;
+let currentY = noBtn.offsetTop;
 
-    const page1 = document.getElementById("page1");
+noBtn.addEventListener("click", function(){
 
     noBtn.style.position = "absolute";
 
     const btnWidth = noBtn.offsetWidth;
     const btnHeight = noBtn.offsetHeight;
 
-    const maxX = page1.clientWidth - btnWidth - 20;
-    const maxY = page1.clientHeight - btnHeight - 20;
+    const maxX = page1.clientWidth - btnWidth;
+    const maxY = page1.clientHeight - btnHeight;
 
-    const x = Math.max(0, Math.random() * maxX);
-    const y = Math.max(0, Math.random() * maxY);
+    // move only a little (±80px)
+    const moveX = (Math.random() - 0.5) * 160;
+    const moveY = (Math.random() - 0.5) * 160;
 
-    noBtn.style.left = `${x}px`;
-    noBtn.style.top = `${y}px`;
+    currentX += moveX;
+    currentY += moveY;
+
+    // keep inside container
+    currentX = Math.max(0, Math.min(currentX, maxX));
+    currentY = Math.max(0, Math.min(currentY, maxY));
+
+    noBtn.style.left = `${currentX}px`;
+    noBtn.style.top = `${currentY}px`;
 
     noBtn.textContent =
         noMessages[noClickCount % noMessages.length];
 
     noClickCount++;
+
+    if(noClickCount > 5){
+        noBtn.style.transform =
+            `scale(${Math.max(0.5, 1 - noClickCount * 0.05)})`;
+    }
+
+    if(noClickCount === 10){
+        noBtn.textContent = "Okay fine 😭";
+    }
+
+    if(noClickCount === 15){
+        noBtn.style.display = "none";
+    }
 });
 if(noClickCount > 5){
     noBtn.style.transform =
