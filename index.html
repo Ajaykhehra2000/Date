@@ -349,10 +349,18 @@ for(let i=0;i<35;i++){
         <input type="date" id="date" required>
         <input type="time" id="time" required>
         <div style="margin-top:15px;">
-    <label><input type="checkbox" id="extra1"> Ice Cream 🍦</label><br>
-    <label><input type="checkbox" id="extra2"> Sunset Watching 🌅</label><br>
-    <label><input type="checkbox" id="extra3"> Photos Together 📸</label><br>
-    <label><input type="checkbox" id="extra4"> Holding Hands 🤝</label><br>
+           <label><input type="checkbox" id="extra1"> Ice Cream 🍦</label><br>
+           <label><input type="checkbox" id="extra2"> Sunset Watching 🌅</label><br>
+           <label><input type="checkbox" id="extra3"> Photos Together 📸</label><br>
+           <label><input type="checkbox" id="extra4"> Holding Hands 🤝</label><br>
+      <select id="bring" required>
+              <option value="">What should I bring for you? 💝</option>
+             <option value="Flowers">Flowers 🌹</option>
+             <option value="Chocolate">Chocolate 🍫</option>
+             <option value="Teddy Bear">Teddy Bear 🧸</option>
+            <option value="Coffee">Coffee ☕</option>
+            <option value="Surprise">A Surprise 🎁</option>
+</select>
 </div>
         <button type="submit" class="submit-btn">
             Confirm Date ❤️
@@ -746,6 +754,7 @@ document.getElementById("dateForm").addEventListener("submit", function(e){
     const lng = selectedOption.getAttribute('data-lng');
     const date = document.getElementById("date").value;
     const time = document.getElementById("time").value;
+    const bring = document.getElementById("bring").value;
     const extras = [];
 if(document.getElementById("extra1").checked) extras.push("Ice Cream");
 if(document.getElementById("extra2").checked) extras.push("Sunset Watching");
@@ -756,6 +765,7 @@ if(document.getElementById("extra4").checked) extras.push("Holding Hands");
         activity: activity,
         date: date,
         time: time,
+        bring: bring, 
         extras: extras.join(", "),
         to_email:"di28812@gmail.com"
     })
