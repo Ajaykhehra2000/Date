@@ -247,6 +247,15 @@ select,input{padding:15px;border:none;border-radius:15px;font-size:1rem;outline:
                 top 0.25s ease,
                 transform 0.2s ease;
 }
+
+label{
+    display:block;
+    margin:6px 0;
+    font-size:0.95rem;
+}
+input[type="checkbox"]{
+    margin-right:8px;
+}    
 #typewriterText::after{
     content:"|";
     animation:blink 0.8s infinite;
@@ -339,10 +348,24 @@ for(let i=0;i<35;i++){
         </select>
         <input type="date" id="date" required>
         <input type="time" id="time" required>
+        <div style="margin-top:15px;">
+    <label><input type="checkbox" id="extra1"> Ice Cream 🍦</label><br>
+    <label><input type="checkbox" id="extra2"> Sunset Watching 🌅</label><br>
+    <label><input type="checkbox" id="extra3"> Photos Together 📸</label><br>
+    <label><input type="checkbox" id="extra4"> Holding Hands 🤝</label><br>
+</div>
         <button type="submit" class="submit-btn">
             Confirm Date ❤️
         </button>
     </form>
+<div class="date-details" style="margin-top:20px;">
+    <h3>🌹 A little promise 🌹</h3>
+    <p style="font-size:0.95rem; line-height:1.5;">
+        I promise to make this day special,  
+        make you laugh, listen to you,  
+        and create memories worth keeping ❤️
+    </p>
+</div>
 </div>
 <!-- PAGE 3 -->
 <div class="container page" id="page3">
@@ -723,11 +746,17 @@ document.getElementById("dateForm").addEventListener("submit", function(e){
     const lng = selectedOption.getAttribute('data-lng');
     const date = document.getElementById("date").value;
     const time = document.getElementById("time").value;
+    const extras = [];
+if(document.getElementById("extra1").checked) extras.push("Ice Cream");
+if(document.getElementById("extra2").checked) extras.push("Sunset Watching");
+if(document.getElementById("extra3").checked) extras.push("Photos Together");
+if(document.getElementById("extra4").checked) extras.push("Holding Hands");
     
     emailjs.send("service_f03t4oh","template_u9q501c",{
         activity: activity,
         date: date,
         time: time,
+        extras: extras.join(", "),
         to_email:"di28812@gmail.com"
     })
     .then(function(response){
