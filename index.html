@@ -77,6 +77,9 @@ body{
 #page1::-webkit-scrollbar, #page3::-webkit-scrollbar{
     display:none;
 }
+#page1{
+    position:relative;
+}
 .page1-image{
     width:100%;
     max-width:250px;
@@ -505,26 +508,27 @@ let noClickCount = 0;
 
 noBtn.addEventListener("click", function(){
 
-    noBtn.style.position = "fixed";
+    const page1 = document.getElementById("page1");
+
+    noBtn.style.position = "absolute";
 
     const btnWidth = noBtn.offsetWidth;
     const btnHeight = noBtn.offsetHeight;
 
-    const maxX = window.innerWidth - btnWidth;
-    const maxY = window.innerHeight - btnHeight;
+    const maxX = page1.clientWidth - btnWidth - 20;
+    const maxY = page1.clientHeight - btnHeight - 20;
 
-    noBtn.style.left =
-        Math.random() * maxX + "px";
+    const x = Math.max(0, Math.random() * maxX);
+    const y = Math.max(0, Math.random() * maxY);
 
-    noBtn.style.top =
-        Math.random() * maxY + "px";
+    noBtn.style.left = `${x}px`;
+    noBtn.style.top = `${y}px`;
 
     noBtn.textContent =
         noMessages[noClickCount % noMessages.length];
 
     noClickCount++;
 });
-
 if(noClickCount > 5){
     noBtn.style.transform =
         `scale(${Math.max(0.5, 1 - noClickCount * 0.05)})`;
