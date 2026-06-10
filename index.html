@@ -239,6 +239,17 @@ select,input{padding:15px;border:none;border-radius:15px;font-size:1rem;outline:
 .fade-out{
     opacity:0;
 }
+
+#typewriterText::after{
+    content:"|";
+    animation:blink 0.8s infinite;
+}
+
+@keyframes blink{
+    50%{
+        opacity:0;
+    }
+}    
 @keyframes roseFall{
     0%{
         transform:translateY(-50px) rotate(0deg);
@@ -284,9 +295,9 @@ for(let i=0;i<35;i++){
 <div class="container page active" id="page1">
     <img src="Img.webp" alt="Special photo" class="page1-image">
     <div class="teddy">🧸</div>
-    <h1 class="sparkle">
-        Would You Like To Go Out With Me, Robin?
-    </h1>
+   <div id="typewriterContainer">
+    <h1 id="typewriterText" class="sparkle"></h1>
+</div>
     <p class="subtitle">
         Pretty please? ❤️
     </p>
@@ -490,17 +501,40 @@ function setDateConstraints(){
 
 // NO BUTTON MOVE ON CLICK
 const noBtn = document.getElementById("noBtn");
-noBtn.addEventListener("click", function moveNoNumber(e) {
+let noClickCount = 0;
+
+noBtn.addEventListener("click", function(){
+
     noBtn.style.position = "fixed";
+
     const btnWidth = noBtn.offsetWidth;
     const btnHeight = noBtn.offsetHeight;
+
     const maxX = window.innerWidth - btnWidth;
     const maxY = window.innerHeight - btnHeight;
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
+
+    noBtn.style.left =
+        Math.random() * maxX + "px";
+
+    noBtn.style.top =
+        Math.random() * maxY + "px";
+
+    noBtn.textContent =
+        noMessages[noClickCount % noMessages.length];
+
+    noClickCount++;
 });
+
+if(noClickCount > 5){
+    noBtn.style.transform =
+        `scale(${Math.max(0.5, 1 - noClickCount * 0.05)})`;
+}
+if(noClickCount === 10){
+    noBtn.textContent = "Okay fine 😭";
+}
+if(noClickCount === 15){
+    noBtn.style.display = "none";
+}
 
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightboxImg");
@@ -559,6 +593,19 @@ const reasons = [
     "You have the sweetest heart 💖",
     "Being with you feels easy and natural 🌸"
 ];
+
+const noMessages = [
+    "Are you sure? 🥺",
+    "Really sure? 😢",
+    "Pretty please? ❤️",
+    "I brought flowers 💐",
+    "You can't escape 😆",
+    "Think again 😏",
+    "One date won't hurt 🥰",
+    "You're too cute to say no ❤️",
+    "Last chance 👀",
+    "Nice try 😘"
+];    
     function startReasonsCarousel(){
     const reasonBox = document.getElementById("reasonBox");
 
@@ -599,6 +646,39 @@ function showerRoses(){
         }, 6000);
     }
 }
+
+    const message =
+`Hey Robin ❤️
+
+There's something I've been wanting to ask you...
+
+Would you like to go out with me?`;
+
+function startTypewriter(){
+
+    const element = document.getElementById("typewriterText");
+
+    let i = 0;
+
+    function type(){
+
+        if(i < message.length){
+
+            element.innerHTML +=
+                message.charAt(i) === "\n"
+                    ? "<br>"
+                    : message.charAt(i);
+
+            i++;
+
+            setTimeout(type, 50);
+        }
+    }
+
+    type();
+}
+
+window.addEventListener("load", startTypewriter);
     
 // FORM SUBMIT
 document.getElementById("dateForm").addEventListener("submit", function(e){
